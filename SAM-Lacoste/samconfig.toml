@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lacoste-156-dev"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-86dnlgcq40rn"
+s3_prefix = "lacoste-156-dev"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = ["LacosteProductFunction=601772211076.dkr.ecr.us-east-1.amazonaws.com/lacoste-registry"]
+disable_rollback = true
