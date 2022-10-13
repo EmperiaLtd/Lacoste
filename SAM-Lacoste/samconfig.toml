@@ -3,8 +3,8 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "lacoste-156-dev"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-86dnlgcq40rn"
-s3_prefix = "lacoste-156-dev"
+s3_bucket = "sftpgw-i-06e8a0b5d0a44b1fb"
+s3_prefix = "users/Lacoste/"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
