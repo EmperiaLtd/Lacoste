@@ -13,7 +13,7 @@ Globals:
           AllowHeaders: "'content-type'"
           AllowOrigin: "'*'"
   Function:
-    Timeout: 15
+    Timeout: 100
 
 Resources:
   LacosteProductFunction:

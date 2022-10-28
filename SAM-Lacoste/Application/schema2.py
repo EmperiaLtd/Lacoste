@@ -19,12 +19,31 @@ def schema_to_json_2(upcs_2):
     resp = {
         'name_EN': upcs_2[0].display_name_EN,
         'name_ES': upcs_2[0].display_name_ES,
-        'defaultColor': upcs_2[0].color,
+        'defaultColor': {},
     }
+    for row in upcs_2: 
+        resp["defaultColor"][row.color] = row.color
 
     return {
         "status": "OK",
         "data": resp
     }
 
+def market_to_json_2(upcs_2):
+    """
+    Convert the file schema into a JSON response object to be received by the client
 
+    :param upcs list: contains objects
+    """
+    resp = []
+    for row in upcs_2: 
+        objHolder =  {
+        'pid':row.Product_ID,   
+        'title': row.display_name_EN,
+        # 'products':{}
+        }
+        resp.append(objHolder)
+    return {
+        "status": "OK",
+        "data": resp
+    } 
