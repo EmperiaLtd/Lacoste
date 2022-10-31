@@ -14,10 +14,12 @@ import numpy as np
 #/////////////////////////this is test one for lacoste /////////////////////////
 headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
     "Access-Control-Allow-Origin": '*',
-    "Access-Control-Allow-Methods": 'POST'
+    "Access-Control-Allow-Methods": "DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT",
+    "X-Requested-With": "*"
 }
+
 
 """connection to database"""
 db = connect_to_db()
@@ -26,9 +28,13 @@ s3 = boto3.resource('s3')
 def lambda_handler(event, context):
 
     insert_data_into_db()
-    
+    return {
+        "status": "OK",
+        "message": "INSERTED SUCCESSFULLY",
+    }
 def insert_data_into_db():
-     
+    
+    #MAIN FUNCTION FOR INSERTING DATA INTO REDIS DB   
     s3_bucket_name='sftpgw-i-06e8a0b5d0a44b1fb'
     df = []
     df_1=[]
@@ -50,9 +56,9 @@ def insert_data_into_db():
         from io import StringIO 
     
     for file in bucket_list:
+        # LOOP FOR READ CSV FILES COMING FROM S3 BUCKET 
         obj = s3.Object(s3_bucket_name,file)
         data=obj.get()['Body'].read()
-        
         if file == "users/Lacoste/virtual store catalog CA (2).csv":
             market="CA"
             df.append(pd.read_csv(io.BytesIO(data), header=0, delimiter=",", low_memory=False,encoding = "ISO-8859-1"))
@@ -62,6 +68,7 @@ def insert_data_into_db():
             upcs = [] #initialising empty list
             pid2=converted_df['Product_ID'].iloc[0]
             for index, row in converted_df.iterrows():
+                # FOR INSERTING THE PRODUCTS DETAILS INTO JSON RESPONSE IN REDIS DB
                 pid = row.Product_ID
                 if pid != pid2:
                         upcs.clear()
@@ -72,6 +79,7 @@ def insert_data_into_db():
                     db.set("Lacoste" + "_" + market +"_"+ row.Product_ID , file_data)
                     print("inserted",market)      
             for index, row in converted_df.iterrows():
+                # FOR INSERTING ALL PRODUCTS ID AND TITLE INTO ONE JSON RESPONSE
                 upcs.append(row)
                 file_d = json.dumps(market_to_json(upcs))
                 db.set("Lacoste"+ "_" + market, file_d)
@@ -86,6 +94,7 @@ def insert_data_into_db():
             upcs_1 = [] #initialising empty list 
             pid2=converted_df_1['Product_ID'].iloc[0]
             for index, row in converted_df_1.iterrows():
+                # FOR INSERTING THE PRODUCTS DETAILS INTO JSON RESPONSE IN REDIS DB
                 pid = row.Product_ID
                 if pid != pid2:
                         upcs_1.clear()
@@ -96,6 +105,7 @@ def insert_data_into_db():
                     db.set("Lacoste" + "_" + market +"_"+ row.Product_ID, file_data_1)
                     print("inserted",market)      
             for index, row in converted_df_1.iterrows():
+                    # FOR INSERTING ALL PRODUCTS ID AND TITLE INTO ONE JSON RESPONSE
                     upcs_1.append(row)
                     file_d_1 = json.dumps(market_to_json_1(upcs_1))
                     db.set("Lacoste" + "_" + market, file_d_1)
@@ -109,6 +119,7 @@ def insert_data_into_db():
             upcs_2 = [] #initialising empty list 
             pid2=converted_df_2['Product_ID'].iloc[0]
             for index, row in converted_df_2.iterrows():
+                # FOR INSERTING THE PRODUCTS DETAILS INTO JSON RESPONSE IN REDIS DB
                 pid = row.Product_ID
                 if pid != pid2:
                         upcs_2.clear()
@@ -119,6 +130,7 @@ def insert_data_into_db():
                     db.set("Lacoste" + "_" + market +"_"+ row.Product_ID, file_data_2)      
                     print("inserted",market)
             for index, row in converted_df_2.iterrows():
+                    # FOR INSERTING ALL PRODUCTS ID AND TITLE INTO ONE JSON RESPONSE
                     upcs_2.append(row)
                     file_d_2 = json.dumps(market_to_json_2(upcs_2))
                     db.set("Lacoste"+ "_" + market, file_d_2)
@@ -132,6 +144,7 @@ def insert_data_into_db():
             upcs_3 = [] #initialising empty list 
             pid2=converted_df_3['Product_ID'].iloc[0]
             for index, row in converted_df_3.iterrows():
+                # FOR INSERTING THE PRODUCTS DETAILS INTO JSON RESPONSE IN REDIS DB
                 pid = row.Product_ID
                 if pid != pid2:
                         upcs_3.clear()
@@ -142,12 +155,10 @@ def insert_data_into_db():
                     db.set("Lacoste" + "_" + market +"_"+ row.Product_ID, file_data_3)      
                     print("inserted",market)
             for index, row in converted_df_3.iterrows():
+                    # FOR INSERTING ALL PRODUCTS ID AND TITLE INTO ONE JSON RESPONSE
                     upcs_3.append(row)
                     file_d_3 = json.dumps(market_to_json_3(upcs_3))
                     db.set("Lacoste"+ "_" + market, file_d_3)          
-    # # return {
-    # #     "status": "BAD",
-    # #     "message": "Could not find specified PID",
-    # # }
+    
 
 

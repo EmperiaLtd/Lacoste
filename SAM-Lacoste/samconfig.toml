@@ -2,7 +2,7 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "lacoste-dev"
+stack_name = "lacoste-csv-parsing"
 s3_bucket = "sftpgw-i-06e8a0b5d0a44b1fb"
 s3_prefix = "users/Lacoste/"
 region = "us-east-1"
