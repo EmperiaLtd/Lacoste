@@ -40,7 +40,8 @@ def market_to_json(upcs):
     for row in upcs: 
         objHolder =  {
         'pid':row.Product_ID,   
-        'title': row.display_name_EN,
+        'title': row.display_name_EN.split(';', 1)[0],
+        'imageURL': 'NaN',
         # 'products':{}
         }
         resp.append(objHolder)
